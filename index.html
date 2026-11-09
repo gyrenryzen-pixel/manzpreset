@@ -111,10 +111,15 @@ c.style.display = (cat==='all' || c.dataset.cat===cat) ? 'block':'none';
 });
 }
 function filterPreset(){
-let q=document.getElementById('cari').value.toLowerCase();
-document.querySelectorAll('.card').forEach(c=>{
-c.style.display = c.dataset.key.includes(q) ? 'block':'none';
-});
+  let input = document.getElementById('cari');
+  let q = input.value.trim().toLowerCase();
+  if(q.includes('tiktok.com') || q.includes('vt.tiktok')){
+    window.open(input.value.trim(), '_blank');
+    return;
+  }
+  document.querySelectorAll('.card').forEach(c=>{
+    c.style.display = (q=='' || c.dataset.key.includes(q)) ? 'block':'none';
+  });
 }
 </script>
 </body>
