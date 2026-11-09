@@ -120,8 +120,10 @@ async function filterPreset(){
   if(q.includes('tiktok.com') || q.includes('vt.tiktok')){
     hasil.innerHTML = 'Lagi ngubek komennya... tunggu 5 detik...';
     try{
-      let id = q.match(/video\/(\d+)/)?.[1] || q;
-      let res = await fetch('https://www.tikwm.com/api/comment/list?aweme_id='+id+'&count=50&cursor=0');
+     let res0 = await fetch('https://www.tikwm.com/api/?url='+encodeURIComponent(q));
+let j0 = await res0.json();
+let id = j0.data?.id || q.match(/video\/(\d+)/)?.[1] || q;
+let res = await fetch('https://www.tikwm.com/api/comment/list?aweme_id='+id+'&count=50&cursor=0');
       let data = await res.json();
       let komen = data.data?.comments || [];
       let ketemu = [];
