@@ -111,42 +111,40 @@ document.querySelectorAll('.card').forEach(c=>{
 c.style.display = (cat==='all' || c.dataset.cat===cat) ? 'block':'none';
 });
 }
-function filterPreset(){
+async function filterPreset(){
   let input = document.getElementById('cari');
-  let q = input.value.trim();
   let hasil = document.getElementById('hasil');
+  let q = input.value.trim();
   if(!q) return;
-  if(!q.includes('tiktok.com')){
-    document.querySelectorAll('.card').forEach(c=>{
-      c.style.display = c.dataset.key.includes(q.toLowerCase()) ? 'block':'none';
-    });
+  // Kalo yang dipaste link TikTok, ngubek komen
+  if(q.includes('tiktok.com') || q.includes('vt.tiktok')){
+    hasil.innerHTML = 'Lagi ngubek komennya... tunggu 5 detik...';
+    try{
+      let id = q.match(/video\/(\d+)/)?.[1] || q;
+      let res = await fetch('https://www.tikwm.com/api/comment/list?aweme_id='+id+'&count=50&cursor=0');
+      let data = await res.json();
+      let komen = data.data?.comments || [];
+      let ketemu = [];
+      komen.forEach(c=>{
+        let txt = c.text || '';
+        let m = txt.match(/https?:\/\/[^\s]+/g);
+        if(m) m.forEach(u=>{
+          if(u.includes('alight') || u.includes('drive.google') || u.includes('bit.ly') || u.includes('preset')) ketemu.push({user:c.user?.nickname, text:txt, link:u});
+        });
+      });
+      if(ketemu.length==0){ hasil.innerHTML = 'Gak ketemu link preset di 50 komen pertama. Coba video lain.'; return; }
+      hasil.innerHTML = ketemu.map(k=>`<div style="background:#222;padding:10px;border-radius:10px;margin-top:10px"><b>@${k.user}</b><br>${k.text}<br><a href="${k.link}" target="_blank" style="color:#00e5ff">Buka Preset</a></div>`).join('');
+    }catch(e){ hasil.innerHTML = 'Error: ' + e.message + ' - API TikTok lagi diblokir, coba lagi nanti.'; }
     return;
   }
-  hasil.innerHTML = 'Lagi ngubek komen nya... tunggu bentar';
-  (async ()=>{
-    try{
-      let res = await fetch('https://www.tikwm.com/api/?url=' + encodeURIComponent(q));
-      let j = await res.json();
-      let d = j.data;
-      let semuaTeks = (d.desc || '') + ' ';
-      let cursor = 0;
-      for(let i=0;i<3;i++){
-        let rc = await fetch(`https://www.tikwm.com/api/comment/list?aweme_id=${d.id}&cursor=${cursor}&count=50`);
-        let jc = await rc.json();
-        if(!jc.data || !jc.data.comments) break;
-        jc.data.comments.forEach(c=>{
-          semuaTeks += ' ' + (c.text || '') + ' ';
-          if(c.reply_comment) c.reply_comment.forEach(r=> semuaTeks += ' ' + (r.text || ''));
-        });
-        if(!jc.data.has_more) break;
-        cursor = jc.data.cursor;
-      }
-      let links = semuaTeks.match(/https?:\/\/[^\s\"'<>]+/gi) || [];
-      let presetLinks = [...new Set(links.filter(l => l.includes('alight') || l.includes('drive.google') || l.includes('bit.ly')))];
-      let listHtml = presetLinks.length > 0 ? presetLinks.map(l => `<a href="${l}" target="_blank" style="display:block;background:#22c55e;color:#000;text-align:center;padding:12px;border-radius:12px;margin-top:8px;font-weight:bold">Buka Preset</a>`).join('') : '<p style="color:#f87171">Gak ketemu link preset di komen video ini.</p>';
-      hasil.innerHTML = `<div style="background:#111;padding:16px;border-radius:16px;margin-top:16px"><img src="${d.cover}" style="width:100%;border-radius:12px"><p><b>@${d.author.nickname}</b></p><p>${d.desc}</p><p>🎵 ${d.music_info ? d.music_info.title : '-'}</p>${listHtml}</div>`;
-    }catch(e){ hasil.innerHTML = 'Gagal, coba lagi.'; }
-  })();
+  // Kalo bukan link, nyari preset lokal kayak biasa
+  let cards = document.querySelectorAll('.card');
+  cards.forEach(card=>{
+    let key = card.getAttribute('data-key') || '';
+    card.style.display = key.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+  hasil.innerHTML = '';
 }
+  }
 </body>
 </html>
