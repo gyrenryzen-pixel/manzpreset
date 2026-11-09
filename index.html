@@ -43,6 +43,7 @@ footer{text-align:center;color:#666;font-size:12px;padding:20px}
 <input id="cari" placeholder="Cari preset / lagu / kreator..." oninput="filterPreset()">
 <button onclick="filterPreset()">Cari</button>
 </div>
+  <div id="hasil"></div>
 <div class="cat">
 <button class="active" onclick="filterCat('all',this)">Semua</button>
 <button onclick="filterCat('jedag',this)">Jedag Jedug</button>
@@ -112,15 +113,40 @@ c.style.display = (cat==='all' || c.dataset.cat===cat) ? 'block':'none';
 }
 function filterPreset(){
   let input = document.getElementById('cari');
-  let q = input.value.trim().toLowerCase();
-  if(q.includes('tiktok.com') || q.includes('vt.tiktok')){
-    window.open(input.value.trim(), '_blank');
+  let q = input.value.trim();
+  let hasil = document.getElementById('hasil');
+  if(!q) return;
+  if(!q.includes('tiktok.com')){
+    document.querySelectorAll('.card').forEach(c=>{
+      c.style.display = c.dataset.key.includes(q.toLowerCase()) ? 'block':'none';
+    });
     return;
   }
-  document.querySelectorAll('.card').forEach(c=>{
-    c.style.display = (q=='' || c.dataset.key.includes(q)) ? 'block':'none';
-  });
+  hasil.innerHTML = 'Lagi ngubek komen nya... tunggu bentar';
+  (async ()=>{
+    try{
+      let res = await fetch('https://www.tikwm.com/api/?url=' + encodeURIComponent(q));
+      let j = await res.json();
+      let d = j.data;
+      let semuaTeks = (d.desc || '') + ' ';
+      let cursor = 0;
+      for(let i=0;i<3;i++){
+        let rc = await fetch(`https://www.tikwm.com/api/comment/list?aweme_id=${d.id}&cursor=${cursor}&count=50`);
+        let jc = await rc.json();
+        if(!jc.data || !jc.data.comments) break;
+        jc.data.comments.forEach(c=>{
+          semuaTeks += ' ' + (c.text || '') + ' ';
+          if(c.reply_comment) c.reply_comment.forEach(r=> semuaTeks += ' ' + (r.text || ''));
+        });
+        if(!jc.data.has_more) break;
+        cursor = jc.data.cursor;
+      }
+      let links = semuaTeks.match(/https?:\/\/[^\s\"'<>]+/gi) || [];
+      let presetLinks = [...new Set(links.filter(l => l.includes('alight') || l.includes('drive.google') || l.includes('bit.ly')))];
+      let listHtml = presetLinks.length > 0 ? presetLinks.map(l => `<a href="${l}" target="_blank" style="display:block;background:#22c55e;color:#000;text-align:center;padding:12px;border-radius:12px;margin-top:8px;font-weight:bold">Buka Preset</a>`).join('') : '<p style="color:#f87171">Gak ketemu link preset di komen video ini.</p>';
+      hasil.innerHTML = `<div style="background:#111;padding:16px;border-radius:16px;margin-top:16px"><img src="${d.cover}" style="width:100%;border-radius:12px"><p><b>@${d.author.nickname}</b></p><p>${d.desc}</p><p>🎵 ${d.music_info ? d.music_info.title : '-'}</p>${listHtml}</div>`;
+    }catch(e){ hasil.innerHTML = 'Gagal, coba lagi.'; }
+  })();
 }
-</script>
 </body>
 </html>
