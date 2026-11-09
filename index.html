@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MANZ PRESET - Kumpulan Preset Alight Motion</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
+body{background:#0a0a0f;color:#fff;padding:16px}
+header{text-align:center;padding:20px 0 10px}
+header h1{font-size:32px;letter-spacing:2px}
+header h1 span{color:#a855f7}
+header p{color:#aaa;margin-top:6px;font-size:14px}
+.search{max-width:500px;margin:16px auto;display:flex;gap:8px}
+.search input{flex:1;padding:12px;border-radius:12px;border:1px solid #333;background:#1a1a22;color:#fff;outline:none}
+.search button{padding:12px 18px;border-radius:12px;border:none;background:#a855f7;color:#fff;font-weight:bold}
+.cat{display:flex;gap:8px;overflow-x:auto;padding:10px 0;justify-content:center}
+.cat button{padding:8px 16px;border-radius:999px;border:1px solid #333;background:#1a1a22;color:#fff;white-space:nowrap}
+.cat button.active{background:#a855f7;border-color:#a855f7}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;max-width:1100px;margin:10px auto}
+.card{background:#15151d;border:1px solid #26262f;border-radius:18px;overflow:hidden}
+.video{aspect-ratio:9/13;background:#000;display:flex;align-items:center;justify-content:center}
+.video iframe{width:100%;height:100%;border:0}
+.info{padding:14px}
+.info h3{font-size:17px}
+.by{color:#a855f7;font-size:13px;margin:4px 0}
+.song{color:#aaa;font-size:13px;margin-bottom:12px}
+.btns{display:flex;gap:8px}
+.btns a{flex:1;text-align:center;padding:10px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:bold}
+.dl{background:#a855f7;color:#fff}
+.lagu{background:#222;color:#fff;border:1px solid #333}
+.creator{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12px;color:#888}
+.creator a{color:#fff;text-decoration:none}
+footer{text-align:center;color:#666;font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+<header>
+<h1>MANZ <span>PRESET</span></h1>
+<p>Kumpulan Preset Alight Motion Terbaik • By Kreator Indonesia</p>
+</header>
+<div class="search">
+<input id="cari" placeholder="Cari preset / lagu / kreator..." oninput="filterPreset()">
+<button onclick="filterPreset()">Cari</button>
+</div>
+<div class="cat">
+<button class="active" onclick="filterCat('all',this)">Semua</button>
+<button onclick="filterCat('jedag',this)">Jedag Jedug</button>
+<button onclick="filterCat('slowmo',this)">Slowmo</button>
+<button onclick="filterCat('anime',this)">Anime</button>
+<button onclick="filterCat('galau',this)">Galau</button>
+</div>
+<div class="grid" id="grid">
+<div class="card" data-cat="jedag" data-key="jedag jedug viral @kreator1 lagu viral">
+<div class="video">
+<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@alightmotion/video/7250000000000000000" data-video-id="7250000000000000000" style="max-width:100%;min-width:100%"><section><a href="https://www.tiktok.com/@alightmotion">Ganti Link TikTok Disini</a></section></blockquote>
+</div>
+<div class="info">
+<h3>Preset Jedag Jedug Viral 🔥</h3>
+<div class="by">Preset by @kreator1</div>
+<div class="song">🎵 Lagu: DJ Viral - Jedag Jedug</div>
+<div class="btns">
+<a class="dl" href="https://drive.google.com/PASTE-LINK-PRESET-DISINI" target="_blank">Download Preset</a>
+<a class="lagu" href="https://PASTE-LINK-LAGU-DISINI" target="_blank">Lagu</a>
+</div>
+<div class="creator"><span>Credit: @kreator1</span><a href="https://www.tiktok.com/@kreator1" target="_blank">Follow Kreator →</a></div>
+</div>
+</div>
+<div class="card" data-cat="slowmo" data-key="slowmo smooth @kreator2">
+<div class="video">
+<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@alightmotion/video/7250000000000000000" data-video-id="7250000000000000000" style="max-width:100%;min-width:100%"><section><a href="https://www.tiktok.com/@alightmotion">Ganti Link TikTok Disini</a></section></blockquote>
+</div>
+<div class="info">
+<h3>Preset Slowmo Smooth</h3>
+<div class="by">Preset by @kreator2</div>
+<div class="song">🎵 Lagu: Slowmo - Lagu Galau</div>
+<div class="btns">
+<a class="dl" href="https://drive.google.com/PASTE-LINK-PRESET-DISINI" target="_blank">Download Preset</a>
+<a class="lagu" href="https://PASTE-LINK-LAGU-DISINI" target="_blank">Lagu</a>
+</div>
+<div class="creator"><span>Credit: @kreator2</span><a href="https://www.tiktok.com/@kreator2" target="_blank">Follow Kreator →</a></div>
+</div>
+</div>
+<div class="card" data-cat="anime" data-key="anime amv @kreator3">
+<div class="video">
+<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@alightmotion/video/7250000000000000000" data-video-id="7250000000000000000" style="max-width:100%;min-width:100%"><section><a href="https://www.tiktok.com/@alightmotion">Ganti Link TikTok Disini</a></section></blockquote>
+</div>
+<div class="info">
+<h3>Preset Anime AMV</h3>
+<div class="by">Preset by @kreator3</div>
+<div class="song">🎵 Lagu: Anime Song - AMV</div>
+<div class="btns">
+<a class="dl" href="https://drive.google.com/PASTE-LINK-PRESET-DISINI" target="_blank">Download Preset</a>
+<a class="lagu" href="https://PASTE-LINK-LAGU-DISINI" target="_blank">Lagu</a>
+</div>
+<div class="creator"><span>Credit: @kreator3</span><a href="https://www.tiktok.com/@kreator3" target="_blank">Follow Kreator →</a></div>
+</div>
+</div>
+</div>
+<footer>
+MANZ PRESET © 2026 • Semua preset milik kreator masing-masing.<br>
+Mau preset lu ditampilin disini? DM TikTok @manzpreset
+</footer>
+<script async src="https://www.tiktok.com/embed.js"></script>
+<script>
+function filterCat(cat,btn){
+document.querySelectorAll('.cat button').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+document.querySelectorAll('.card').forEach(c=>{
+c.style.display = (cat==='all' || c.dataset.cat===cat) ? 'block':'none';
+});
+}
+function filterPreset(){
+let q=document.getElementById('cari').value.toLowerCase();
+document.querySelectorAll('.card').forEach(c=>{
+c.style.display = c.dataset.key.includes(q) ? 'block':'none';
+});
+}
+</script>
+</body>
+</html>
